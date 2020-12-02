@@ -18,6 +18,8 @@ int main()
 	float *mat_B = new float[N * N];
 	
 	float *mat_C = new float[N * N];
+	float *mat_D = new float[N * N];
+	float *mat_E = new float[N * N];
 
 	srand(time(0));
 
@@ -50,53 +52,46 @@ int main()
 
 	// func cblas_sgemm from BLAS
 	unsigned int start_time2 = clock();
-	cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1, mat_A, N, mat_B, N, 1, mat_C, N);
+	cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1, mat_A, N, mat_B, N, 1, mat_D, N);
 	unsigned int end_time2 = clock();
-	delete[] mat_C;
+	delete[] mat_D;
 	cout << "\n\n2-ой вариант перемножения: Результат работы функции cblas_sgemm \nиз библиотеки BLAS (рекомендуемая реализация из Intel MKL)." << endl;
 	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;
 	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / end_time2 * pow(10, -6);
 
 	// my way
-	// Winograd's algorithm
+	// Winograd's algorithm	
 	unsigned int start_time3 = clock();
-	
 	float rowFactor[N];
 	float columnFactor[N];
-
-	// вычисление rowFactors для MATRIX_1
-	for (int i = 1; i < N; ++i)
+	for (int i = 0; i < N; ++i)
 	{
-		rowFactor[N * i] = mat_A[N*i + 1] * mat_A[N * i + 2];
-		for (int j = 2; j < N / 2; ++j)
-			rowFactor[N * i] = rowFactor[N * i] + mat_A[N * i + 2 * j - 1] * mat_A[N * i + 2 * j];
-
-	}
-
-	//////////////////////////////////// ТОЧКА ОСТАНОВЕКИ
-	// вычисление	columnFactors для MATRIX_2
-	for (int i = 1; i < N; ++i)
-	{
-		columnFactor[i] = mat_B[1, i] * mat_B[2, i];
-		for (int j = 2; j < N / 2; ++j)
-			columnFactor[i] = columnFactor[i] + mat_B[2 * j - 1, i] * mat_B[2 * j, i];
-
-	}
-
-
-	// вычисление матрицы MATRIX_3
-	for (int i = 1; i < N; ++i)
-	{
-		for (int j = 1; i < N; ++j)
+		rowFactor[i] = mat_A[i * N + 1] * mat_A[i * N + 2];
+		columnFactor[i] = mat_B[N + i] * mat_B[2 * N + i];
+		for (int j = 1; j < N / 2; ++j)
 		{
-			mat_C[i, j] = -rowFactor[i] - columnFactor[j];
-				for (int k = 1; k < N / 2; ++k)
-					mat_C[i, j] = mat_C[i, j] + (mat_A[i, 2 * k - 1] + mat_B[2 * k, j]) * (mat_A[i, 2 * k] + mat_B[2 * k - 1, j]);
+			rowFactor[i] += mat_A[i * N + 2 * j - 1] * mat_A[i * N + 2 * j];
+			columnFactor[i] += mat_B[2 * j * N - 1 + i] * mat_B[2 * j * N + i];
 		}
 	}
 
+	for (int i = 0; i < N; ++i)
+	{
+		columnFactor[i] = mat_B[N + i] * mat_B[2 * N + i];
+		for (int j = 1; j < N / 2; ++j)
+			columnFactor[i] += mat_B[2 * j * N - 1 + i] * mat_B[2 * j * N + i];
+	}
+	for (int i = 0; i < N; ++i)
+	{
+		for (int j = 1; j < N; ++j)
+		{
+			mat_E[i * N + j] = -rowFactor[i] - columnFactor[j];
+			for (int k = 0; k < N / 2; ++k)
+				mat_E[i * N + j] += (mat_A[i * N + 2 * k - 1] + mat_B[2 * k * N + j]) * (mat_A[i * N + 2 * k] + mat_B[2 * k * N + j]);
+		}
+	}
 	unsigned int end_time3 = clock();
-	cout << "\n\n3-ий вариант перемножения: Оптимизированный алгоритм по вашему выбору, \nнаписанный мной, производительность должна быть не ниже 30% от 2-го варианта." << endl;
+	cout << "\n\n3-ий вариант перемножения: Оптимизированный алгоритм по моему выбору, \nнаписанный мной, производительность должна быть не ниже 30% от 2-го варианта." << endl;
 	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;
 	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / end_time3 * pow(10, -6);
 
