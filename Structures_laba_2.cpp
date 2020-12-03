@@ -77,7 +77,8 @@ int main()
 	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / end_time2 * pow(10, -6) << endl;
 
 	// my way
-	// Winograd's algorithm	
+	// Strassen's algorithm
+
 	unsigned int start_time3 = clock();
 	
 	unsigned int end_time3 = clock();

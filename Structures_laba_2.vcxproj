@@ -149,7 +149,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Strassen%27s Algorithm.cpp" />
     <ClCompile Include="Structures_laba_2.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Strassen%27s Algorithm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
