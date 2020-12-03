@@ -27,7 +27,7 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 
-	const unsigned int N = 64;
+	const unsigned int N = 2048;
 	float min = 0.0, max = 10.0;
 	float *mat_A = new float[N * N];
 	float *mat_B = new float[N * N];
@@ -63,9 +63,10 @@ int main()
 	unsigned int end_time1 = clock();
 	delete[] mat_C;
 
+	double time1 = (double)(end_time1 - start_time1) / CLOCKS_PER_SEC;
 	cout << "1-ый вариант перемножения: Формула из линейной алгебры." << endl;
 	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;
-	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / end_time1 * pow(10, -6) << endl;
+	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / time1 * pow(10, -6) << endl;
 
 	// func cblas_sgemm from BLAS
 
@@ -74,21 +75,23 @@ int main()
 	unsigned int end_time2 = clock();
 	delete[] mat_D;
 
+	double time2 = (double)(end_time2 - start_time2) / CLOCKS_PER_SEC;
 	cout << "\n\n2-ой вариант перемножения: Результат работы функции cblas_sgemm \nиз библиотеки BLAS (рекомендуемая реализация из Intel MKL)." << endl;
 	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;
-	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / end_time2 * pow(10, -6) << endl;
+	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / time2 * pow(10, -6) << endl;
 
 	// my way
 	// Strassen's algorithm
 
 	unsigned int start_time3 = clock();
-	mat_E  = Strassen(mat_A, mat_B, N);
+//	mat_E  = Strassen(mat_A, mat_B, N);
 	unsigned int end_time3 = clock();
-	delete[] mat_E;
+//	delete[] mat_E;
 
+	double time3 = (double)(end_time3 - start_time3) / CLOCKS_PER_SEC;
 	cout << "\n\n3-ий вариант перемножения: Оптимизированный алгоритм по моему выбору, \nнаписанный мной, производительность должна быть не ниже 30% от 2-го варианта." << endl;
 	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;
-	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / end_time3 * pow(10, -6) << endl;
+	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / time3 * pow(10, -6) << endl;
 
 
 	cout << "\n\n\nФИТУ 2-5, Курочкин Дмитрий Сергеевич";
