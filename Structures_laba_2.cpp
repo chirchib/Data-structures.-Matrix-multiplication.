@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <ctime>
 #include <mkl_cblas.h>
+#include "Strassen's Algorithm.h"
 using namespace std;
 
 float Random(float min, float max)
@@ -26,7 +27,7 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 
-	const unsigned int N = 1;
+	const unsigned int N = 2048;
 	float min = 0.0, max = 10.0;
 	float *mat_A = new float[N * N];
 	float *mat_B = new float[N * N];
@@ -59,8 +60,8 @@ int main()
 		}
 	}
 	unsigned int end_time1 = clock();
-	DisplayMat(mat_C, N * N);
 	delete[] mat_C;
+
 	cout << "1-ый вариант перемножения: Формула из линейной алгебры." << endl;
 	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;
 	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / end_time1 * pow(10, -6) << endl;
@@ -69,9 +70,8 @@ int main()
 	unsigned int start_time2 = clock();
 	cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1.0, mat_A, N, mat_B, N, 0.0, mat_D, N);
 	unsigned int end_time2 = clock();
-
-	DisplayMat(mat_D, N * N);
 	delete[] mat_D;
+
 	cout << "\n\n2-ой вариант перемножения: Результат работы функции cblas_sgemm \nиз библиотеки BLAS (рекомендуемая реализация из Intel MKL)." << endl;
 	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;
 	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / end_time2 * pow(10, -6) << endl;
@@ -80,9 +80,9 @@ int main()
 	// Strassen's algorithm
 
 	unsigned int start_time3 = clock();
-	
+	mat_E = Strassen(mat_A, mat_B, N);
 	unsigned int end_time3 = clock();
-
+	delete[] mat_E;
 
 	cout << "\n\n3-ий вариант перемножения: Оптимизированный алгоритм по моему выбору, \nнаписанный мной, производительность должна быть не ниже 30% от 2-го варианта." << endl;
 	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;

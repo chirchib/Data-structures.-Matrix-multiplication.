@@ -1,7 +1,34 @@
 #include "Strassen's Algorithm.h"
 #include <iostream>
 #include <ctime>
-using namespace std;
+
+float* Strassen(float* matA, float* matB, int size)
+{
+	float** mat1 = create_mat(size);
+	float** mat2 = create_mat(size);
+
+	for (int i = 0; i < size; ++i)
+	{
+		for (int j = 0; j < size; ++j)
+		{
+			mat1[i][j] = matA[i * size + j];
+			mat2[i][j] = matB[i * size + j];
+		}
+	}
+
+	float** mat_res = mult_mat(mat1, mat2, size);
+
+	float* matE = new float[size];
+	for (int i = 0; i < size; ++i)
+	{
+		for (int j = 0; j < size; ++j)
+		{
+			matE[i * size + j] = mat_res[i][j];
+		}
+	}
+
+	return matE;
+}
 
 float** create_mat(int size_mat)
 {
@@ -27,24 +54,24 @@ float** mult(float** mat1, float** mat2, int size_mat)
 	return mat_res;
 }
 
-void split_4mat(float** mat, float** mat11, float** mat12, float** mat21, float** mat22, int size_mat)
+void split_mat(float** mat, float** mat11, float** mat12, float** mat21, float** mat22, int size_mat)
 {
-	int new_size_mat = size_mat / 2;
-	for (int i = 0; i < new_size_mat; ++i)
-		for (int j = 0; j < new_size_mat; ++j)
+	int new_size = size_mat / 2;
+	for (int i = 0; i < new_size; ++i)
+		for (int j = 0; j < new_size; ++j)
 			mat11[i][j] = mat[i][j];
 
-	for (int i = 0; i < new_size_mat; ++i)
-		for (int j = new_size_mat; j < size_mat; ++j)
-			mat12[i][j - new_size_mat] = mat[i][j];
+	for (int i = 0; i < new_size; ++i)
+		for (int j = new_size; j < size_mat; ++j)
+			mat12[i][j - new_size] = mat[i][j];
 
-	for (int i = new_size_mat; i < size_mat; ++i)
-		for (int j = 0; i < new_size_mat; ++j)
-			mat21[i - new_size_mat][j] = mat[i][j];
+	for (int i = new_size; i < size_mat; ++i)
+		for (int j = 0; i < new_size; ++j)
+			mat21[i - new_size][j] = mat[i][j];
 
-	for (int i = new_size_mat; i < size_mat; ++i)
-		for (int j = new_size_mat; i < size_mat; ++j)
-			mat22[i - new_size_mat][j - new_size_mat] = mat[i][j];
+	for (int i = new_size; i < size_mat; ++i)
+		for (int j = new_size; i < size_mat; ++j)
+			mat22[i - new_size][j - new_size] = mat[i][j];
 }
 
 float** collect_4mat(float** mat11, float** mat12, float** mat21, float** mat22, int size_mat)
@@ -109,8 +136,8 @@ float** mult_mat(float** mat1, float** mat2, int size_mat)
 		float** b21 = create_mat(size_mat);
 		float** b22 = create_mat(size_mat);
 
-		split_4mat(mat1, a11, a12, a21, a22, size_mat * 2);
-		split_4mat(mat2, b11, b12, b21, b22, size_mat * 2);
+		split_mat(mat1, a11, a12, a21, a22, size_mat * 2);
+		split_mat(mat2, b11, b12, b21, b22, size_mat * 2);
 
 		float** p1 = mult_mat(sum_mat(a11, a22, size_mat), sum_mat(b11, b22, size_mat), size_mat);
 		float** p2 = mult_mat(sum_mat(a21, a22, size_mat), b11, size_mat);
