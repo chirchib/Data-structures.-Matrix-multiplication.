@@ -19,7 +19,7 @@ float* Linear_algebra(float* mat1, float* mat2, int size)
 		{
 			mat[i * size + j] = 0;
 			for (int k = 0; k < size; ++k)
-				mat[i * size + j] += mat1[i * size + j] * mat2[i * size + j];
+				mat[i * size + j] += mat1[i * size + k] * mat2[k * size + j];
 		}
 	}
 
@@ -44,7 +44,7 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 
-	const unsigned int N = 2048;
+	const unsigned int N = 1024;
 	float min = 0.0, max = 10.0;
 	float *mat_A = new float[N * N];
 	float *mat_B = new float[N * N];
@@ -95,18 +95,18 @@ int main()
 	// Strassen's algorithm
 
 	start_time = clock();
-	mat_E  = Strassen(mat_A, mat_B, N);
+	mat_E  = mult_mat(mat_A, mat_B, N);
 	end_time = clock();
 	delete[] mat_E;
 
 	double time3 = (double)(end_time - start_time) / CLOCKS_PER_SEC;
-	cout << "\n\n3-ий вариант перемножения : Оптимизированный алгоритм по моему выбору, \nнаписанный мной, производительность должна быть не ниже 30% от 2-го варианта." << endl;
+	cout << "\n\n3-ий вариант перемножения : Оптимизированный алгоритм по моему выбору. Алгоритм Штрассена." << endl;
 	cout << "Время работы алгоритма : " << time3 << endl;
 	cout << "Сложность алгоритма : " << 2 * pow(N, 3) << endl;
 	cout << "Производительность в MFlops : " << 2 * pow(N, 3) / time3 * pow(10, -6) << endl;
 
 
-	cout << "\n\n\nФИТУ 2-5, Курочкин Дмитрий Сергеевич";
+	cout << "\n\nФИТУ 2-5, Курочкин Дмитрий Сергеевич" << endl;
 
 	return 0;
 }
