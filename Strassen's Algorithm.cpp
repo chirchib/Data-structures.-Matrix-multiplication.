@@ -18,7 +18,7 @@ float* Strassen(float* matA, float* matB, int size)
 
 	float** mat_res = mult_mat(mat1, mat2, size);
 
-	float* matE = new float[size];
+	float* matE = new float[size * size];
 	for (int i = 0; i < size; ++i)
 	{
 		for (int j = 0; j < size; ++j)

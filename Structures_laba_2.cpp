@@ -19,7 +19,7 @@ float* Linear_algebra(float* mat1, float* mat2, int size)
 		{
 			mat[i * size + j] = 0;
 			for (int k = 0; k < size; ++k)
-				mat[i * size + j] += mat1[i * N + j] * mat2[i * size + j];
+				mat[i * size + j] += mat1[i * size + j] * mat2[i * size + j];
 		}
 	}
 
