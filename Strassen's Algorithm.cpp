@@ -34,24 +34,24 @@ float** create_mat(int size)
 {
 	float** mat = new float* [size];
 	for (int i = 0; i < size; ++i)
-	{
 		mat[i] = new float[size];
+	
+	for (int i = 0; i < size; ++i)
 		for (int j = 0; j < size; ++j)
 			mat[i][j] = 0;
-	}
 
 	return mat;
 }
 
 float** mult(float** mat1, float** mat2, int size)
 {
-	float** mat_res = create_mat(size);
+	float** mat = create_mat(size);
 	for (int i = 0; i < size; ++i)
 		for (int j = 0; j < size; ++j)
 			for (int k = 0; k < size; ++k)
-				mat_res[i][j] += mat1[i][k] * mat2[k][j];
+				mat[i][j] += mat1[i][k] * mat2[k][j];
 
-	return mat_res;
+	return mat;
 }
 
 void split_4mat(float** mat, float** mat11, float** mat12, float** mat21, float** mat22, int size)
@@ -66,11 +66,11 @@ void split_4mat(float** mat, float** mat11, float** mat12, float** mat21, float*
 			mat12[i][j - new_size] = mat[i][j];
 
 	for (int i = new_size; i < size; ++i)
-		for (int j = 0; i < new_size; ++j)
+		for (int j = 0; j < new_size; ++j)
 			mat21[i - new_size][j] = mat[i][j];
 
 	for (int i = new_size; i < size; ++i)
-		for (int j = new_size; i < size; ++j)
+		for (int j = new_size; j < size; ++j)
 			mat22[i - new_size][j - new_size] = mat[i][j];
 }
 
@@ -88,11 +88,11 @@ float** collect_4mat(float** mat11, float** mat12, float** mat21, float** mat22,
 			mat[i][j] = mat12[i][j - size];
 
 	for (int i = size; i < new_size; ++i)
-		for (int j = 0; i < size; ++j)
+		for (int j = 0; j < size; ++j)
 			mat[i][j] = mat21[i - size][j];
 
 	for (int i = size; i < new_size; ++i)
-		for (int j = size; i < new_size; ++j)
+		for (int j = size; j < new_size; ++j)
 			mat[i][j] = mat22[i - size][j - size];
 
 	return mat;
@@ -101,6 +101,7 @@ float** collect_4mat(float** mat11, float** mat12, float** mat21, float** mat22,
 float** sum_mat(float** mat1, float** mat2, int size)
 {
 	float** mat = create_mat(size);
+
 	for (int i = 0; i < size; ++i)
 		for (int j = 0; j < size; ++j)
 			mat[i][j] = mat1[i][j] + mat2[i][j];
@@ -111,6 +112,7 @@ float** sum_mat(float** mat1, float** mat2, int size)
 float** diff_mat(float** mat1, float** mat2, int size)
 {
 	float** mat = create_mat(size);
+
 	for (int i = 0; i < size; ++i)
 		for (int j = 0; j < size; ++j)
 			mat[i][j] = mat1[i][j] - mat2[i][j];

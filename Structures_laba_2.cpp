@@ -50,7 +50,7 @@ int main()
 	
 	// linear algebra
 
-	unsigned int start_time1 = clock();
+	int start_time = clock();
 	for (int i = 0; i < N; ++i)
 	{
 		for (int j = 0; j < N; ++j)
@@ -60,38 +60,41 @@ int main()
 				mat_C[i * N + j] += mat_A[i * N + j] * mat_B[i * N + j];
 		}
 	}
-	unsigned int end_time1 = clock();
+	int end_time = clock();
 	delete[] mat_C;
 
-	double time1 = (double)(end_time1 - start_time1) / CLOCKS_PER_SEC;
-	cout << "1-ый вариант перемножения: Формула из линейной алгебры." << endl;
-	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;
-	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / time1 * pow(10, -6) << endl;
+	double time1 = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+	cout << "1-ый вариант перемножения : Формула из линейной алгебры." << endl;
+	cout << "Время работы алгоритма : " << time1 << endl;
+	cout << "Сложность алгоритма : " << 2 * pow(N, 3) << endl;
+	cout << "Производительность в MFlops : " << 2 * pow(N, 3) / time1 * pow(10, -6) << endl;
 
 	// func cblas_sgemm from BLAS
 
-	unsigned int start_time2 = clock();
+	start_time = clock();
 	cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, N, N, N, 1.0, mat_A, N, mat_B, N, 0.0, mat_D, N);
-	unsigned int end_time2 = clock();
+	end_time = clock();
 	delete[] mat_D;
 
-	double time2 = (double)(end_time2 - start_time2) / CLOCKS_PER_SEC;
-	cout << "\n\n2-ой вариант перемножения: Результат работы функции cblas_sgemm \nиз библиотеки BLAS (рекомендуемая реализация из Intel MKL)." << endl;
-	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;
-	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / time2 * pow(10, -6) << endl;
+	double time2 = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+	cout << "\n\n2-ой вариант перемножения : Результат работы функции cblas_sgemm \nиз библиотеки BLAS (рекомендуемая реализация из Intel MKL)." << endl;
+	cout << "Время работы алгоритма : " << time2 << endl;
+	cout << "Сложность алгоритма : " << 2 * pow(N, 3) << endl;
+	cout << "Производительность в MFlops : " << 2 * pow(N, 3) / time2 * pow(10, -6) << endl;
 
 	// my way
 	// Strassen's algorithm
 
-	unsigned int start_time3 = clock();
-//	mat_E  = Strassen(mat_A, mat_B, N);
-	unsigned int end_time3 = clock();
-//	delete[] mat_E;
+	start_time = clock();
+	mat_E  = Strassen(mat_A, mat_B, N);
+	end_time = clock();
+	delete[] mat_E;
 
-	double time3 = (double)(end_time3 - start_time3) / CLOCKS_PER_SEC;
-	cout << "\n\n3-ий вариант перемножения: Оптимизированный алгоритм по моему выбору, \nнаписанный мной, производительность должна быть не ниже 30% от 2-го варианта." << endl;
-	cout << "Сложность алгоритма: " << 2 * pow(N, 3) << endl;
-	cout << "Производительность в MFlops: " << 2 * pow(N, 3) / time3 * pow(10, -6) << endl;
+	double time3 = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+	cout << "\n\n3-ий вариант перемножения : Оптимизированный алгоритм по моему выбору, \nнаписанный мной, производительность должна быть не ниже 30% от 2-го варианта." << endl;
+	cout << "Время работы алгоритма : " << time3 << endl;
+	cout << "Сложность алгоритма : " << 2 * pow(N, 3) << endl;
+	cout << "Производительность в MFlops : " << 2 * pow(N, 3) / time3 * pow(10, -6) << endl;
 
 
 	cout << "\n\n\nФИТУ 2-5, Курочкин Дмитрий Сергеевич";
