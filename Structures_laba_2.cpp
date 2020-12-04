@@ -9,6 +9,23 @@ float Random(float min, float max)
 	return  (float)(rand()) / RAND_MAX * (max - min) + min;
 }
 
+float* Linear_algebra(float* mat1, float* mat2, int size)
+{
+	float* mat = new float[size * size];
+
+	for (int i = 0; i < size; ++i)
+	{
+		for (int j = 0; j < size; ++j)
+		{
+			mat[i * size + j] = 0;
+			for (int k = 0; k < size; ++k)
+				mat[i * size + j] += mat1[i * N + j] * mat2[i * size + j];
+		}
+	}
+
+	return mat;
+}
+
 void DisplayMat(float* mat, int size)
 {
 	cout << "\n\n" ;
@@ -51,15 +68,7 @@ int main()
 	// linear algebra
 
 	int start_time = clock();
-	for (int i = 0; i < N; ++i)
-	{
-		for (int j = 0; j < N; ++j)
-		{
-			mat_C[i * N + j] = 0;
-			for (int k = 0; k < N; ++k)
-				mat_C[i * N + j] += mat_A[i * N + j] * mat_B[i * N + j];
-		}
-	}
+	mat_C = Linear_algebra(mat_A, mat_B, N);
 	int end_time = clock();
 	delete[] mat_C;
 
