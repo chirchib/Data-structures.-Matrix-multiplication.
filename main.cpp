@@ -44,8 +44,8 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 
-	const unsigned int N = 1024;
-	float min = 0.0, max = 10.0;
+	const int N = 2048;
+	float min = 0.0, max = 1.0;
 	float *mat_A = new float[N * N];
 	float *mat_B = new float[N * N];
 	
@@ -95,7 +95,9 @@ int main()
 	// Strassen's algorithm
 
 	start_time = clock();
-	mat_E  = mult_mat(mat_A, mat_B, N);
+	
+	mat_E = mult_mat(mat_A, mat_B, N);
+
 	end_time = clock();
 	delete[] mat_E;
 

@@ -150,7 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Strassen%27s Algorithm.cpp" />
-    <ClCompile Include="Structures_laba_2.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Strassen%27s Algorithm.h" />
