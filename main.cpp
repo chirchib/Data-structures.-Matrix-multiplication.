@@ -1,7 +1,6 @@
 ﻿#include <iostream>
 #include <ctime>
 #include <mkl_cblas.h>
-#include "Strassen's Algorithm.h"
 using namespace std;
 
 float Random(float min, float max)
@@ -57,7 +56,7 @@ int main()
 {
 	setlocale(LC_ALL, "Russian");
 
-	const int N = 2;
+	const int N = 2048;
 	float min = 0.0, max = 1.0;
 
 	float **A = new float*[N];
